@@ -1,0 +1,175 @@
+   <!-- ============================================ -->
+    <!--                 LEFT ARM                     -->
+    <!-- ============================================ -->
+
+    <!-- Link1: Left arm arca -->
+    <m_link_cylinder name="la_link1"
+                     origin_xyz="0 ${yd_l1} 0" origin_rpy="1.5708 0 0"
+                     length="${la_l1_len}" radius="${la_l1_rad}"
+                     mass="${la_l1_mass}"
+                     ixx="${la_l1_ixx}" ixy="0" ixz="0"
+                     iyy="${la_l1_iyy}" iyz="0"
+                     izz="${la_l1_izz}"
+                     vis_material="white"/>
+
+    <!-- Joint1: base_link - Link1 -->           
+    <m_joint name="joint_base_to_lalink1" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 ${y_la_j1} ${z_la_j1}"
+             parent="base_link" child="la_link1"
+             limit_e="10000" limit_l="${ll_la_j1}" limit_u="${lu_la_j1}" limit_v="${lv_la_j1}" />
+    
+    <!-- Link2: Brazo arca -->
+    <m_link_cylinder name="la_link2"
+                     origin_xyz="0 0.0 ${zd_l2}" origin_rpy="0 0 0"
+                     length="${la_l2_len}" radius="${la_l2_rad}"
+                     mass="${la_l2_mass}"
+                     ixx="${la_l2_ixx}" ixy="0" ixz="0"
+                     iyy="${la_l2_iyy}" iyz="0"
+                     izz="${la_l2_izz}"
+                     vis_material="white"/>
+    
+    <!-- Joint2: Link1 - Link2 -->           
+    <m_joint name="joint_lalink1_to_lalink2" type="revolute"
+             axis_xyz="1 0 0"
+             origin_rpy="0 0 0" origin_xyz="0 ${y_la_j2} 0"
+             parent="la_link1" child="la_link2"
+             limit_e="10000" limit_l="${ll_la_j2}" limit_u="${lu_la_j2}" limit_v="${lv_la_j2}" />
+    
+    <!-- Link3: Brazo arca -->
+    <m_link_cylinder name="la_link3"
+                     origin_xyz="0 0.0 ${zd_l3}" origin_rpy="0 0 0"
+                     length="${la_l3_len}" radius="${la_l3_rad}"
+                     mass="${la_l3_mass}"
+                     ixx="${la_l3_ixx}" ixy="0" ixz="0"
+                     iyy="${la_l3_iyy}" iyz="0"
+                     izz="${la_l3_izz}"
+                     vis_material="white"/>
+    
+    <!-- Joint3: Link2 - Link3 -->        
+    <m_joint name="joint_lalink2_to_lalink3" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 0 ${z_la_j3}"
+             parent="la_link2" child="la_link3"
+             limit_e="10000" limit_l="${ll_la_j3}" limit_u="${lu_la_j3}" limit_v="${lv_la_j3}" />
+    
+    <!-- Link4: Brazo arca -->
+    <m_link_cylinder name="la_link4"
+                     origin_xyz="0 0.0 ${zd_l4}" origin_rpy="0 0 0"
+                     length="${la_l4_len}"  radius="${la_l4_rad}" 
+                     mass="${la_l4_mass}" 
+                     ixx="${la_l4_ixx}" ixy="0" ixz="0"
+                     iyy="${la_l4_iyy}" iyz="0"
+                     izz="${la_l4_izz}"
+                     vis_material="white"/>
+    
+    <!-- Joint4: Link3 - Link4 -->           
+    <m_joint name="joint_lalink3_to_lalink4" type="revolute"
+             axis_xyz="0 0 1"
+             origin_rpy="0 0 0" origin_xyz="0 0.0 ${z_la_j4}"
+             parent="la_link3" child="la_link4"
+             limit_e="10000" limit_l="${ll_la_j4}" limit_u="${lu_la_j4}" limit_v="${lv_la_j4}" />
+    
+    <!-- Link5: manito -->
+    <m_link_box name="la_link5"
+                origin_xyz="0 0.0 ${zd_l5}" origin_rpy="0 0 1.5708"
+                size="${la_l5_sx} ${la_l5_sy} ${la_l5_sz}"
+                mass="${la_l5_mass}"
+                ixx="${la_l5_ixx}" ixy="0" ixz="0"
+                iyy="${la_l5_iyy}" iyz="0"
+                izz="${la_l5_izz}"
+                vis_material="grey"/>
+    
+    <!-- Joint4: Link4 - Link5 -->           
+    <m_joint name="joint_lalink4_to_lalink5" type="revolute"
+             axis_xyz="1 0 0"
+             origin_rpy="0 0 0" origin_xyz="0 0.0 ${z_la_j5}"
+             parent="la_link4" child="la_link5"
+             limit_e="10000" limit_l="${ll_la_j5}" limit_u="${lu_la_j5}" limit_v="${lv_la_j5}" />
+
+    <!-- ============================================ -->
+    <!--                 RIGHT ARM                 -->
+    <!-- ============================================ -->
+    <!-- Link1: right arm arca -->
+    <m_link_cylinder name="ra_link1"
+                     origin_xyz="0 ${-1*yd_l1} 0" origin_rpy="1.5708 0 0"
+                     length="${la_l1_len}" radius="${la_l1_rad}"
+                     mass="${la_l1_mass}"
+                     ixx="${la_l1_ixx}" ixy="0" ixz="0"
+                     iyy="${la_l1_iyy}" iyz="0"
+                     izz="${la_l1_izz}"
+                     vis_material="white"/>
+    
+    <!-- Joint1: base_link - Link1 -->         
+    <m_joint name="joint_base_to_ralink1" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 ${-1*y_la_j1} ${z_la_j1}"
+             parent="base_link" child="ra_link1"
+             limit_e="10000" limit_l="${ll_la_j1}" limit_u="${lu_la_j1}" limit_v="${lv_la_j1}" />
+    
+    <!-- Link2: Brazo arca -->
+    <m_link_cylinder name="ra_link2"
+                     origin_xyz="0 0.0 ${zd_l2}" origin_rpy="0 0 0"
+                     length="${la_l2_len}" radius="${la_l2_rad}"
+                     mass="${la_l2_mass}"
+                     ixx="${la_l2_ixx}" ixy="0" ixz="0"
+                     iyy="${la_l2_iyy}" iyz="0"
+                     izz="${la_l2_izz}"
+                     vis_material="white"/>
+    
+    <!-- Joint2: Link1 - Link2 -->           
+    <m_joint name="joint_ralink1_to_ralink2" type="revolute"
+             axis_xyz="1 0 0"
+             origin_rpy="0 0 0" origin_xyz="0 ${-1*y_la_j2} 0"
+             parent="ra_link1" child="ra_link2"
+             limit_e="10000" limit_l="${-1*lu_la_j2}" limit_u="${-1*ll_la_j2}" limit_v="${lv_la_j2}" />
+    
+    <!-- Link3: Brazo arca -->
+    <m_link_cylinder name="ra_link3"
+                     origin_xyz="0 0.0 ${zd_l3}" origin_rpy="0 0 0"
+                     length="${la_l3_len}" radius="${la_l3_rad}"
+                     mass="${la_l3_mass}"
+                     ixx="${la_l3_ixx}" ixy="0" ixz="0"
+                     iyy="${la_l3_iyy}" iyz="0"
+                     izz="${la_l3_izz}"
+                     vis_material="white"/>
+    
+    <!-- Joint3: Link2 - Link3 -->       
+    <m_joint name="joint_ralink2_to_ralink3" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 0 ${z_la_j3}"
+             parent="ra_link2" child="ra_link3"
+             limit_e="10000" limit_l="${ll_la_j3}" limit_u="${lu_la_j3}" limit_v="0.6" />
+    
+    <!-- Link4: Brazo arca -->
+    <m_link_cylinder name="ra_link4"
+                     origin_xyz="0 0.0 ${zd_l4}" origin_rpy="0 0 0"
+                     length="${la_l4_len}" radius="${la_l4_rad}"
+                     mass="${la_l4_mass}"
+                     ixx="${la_l4_ixx}" ixy="0" ixz="0"
+                     iyy="${la_l4_iyy}" iyz="0"
+                     izz="${la_l4_izz}"
+                     vis_material="white"/>
+    
+    <!-- Joint4: Link3 - Link4 -->          
+    <m_joint name="joint_ralink3_to_ralink4" type="revolute"
+             axis_xyz="0 0 1"
+             origin_rpy="0 0 0" origin_xyz="0 0.0 ${z_la_j4}"
+             parent="ra_link3" child="ra_link4"
+             limit_e="10000" limit_l="${-1*lu_la_j4}" limit_u="${-1*ll_la_j4}" limit_v="${lv_la_j4}" />
+
+    <!-- Link5: manito -->
+    <m_link_box name="ra_link5"
+                origin_xyz="0 0.0 ${zd_l5}" origin_rpy="0 0 1.5708"
+                size="${la_l5_sx} ${la_l5_sy} ${la_l5_sz}" mass="${la_l5_mass}"
+                ixx="${la_l5_ixx}" ixy="0" ixz="0"
+                iyy="${la_l5_iyy}" iyz="0"
+                izz="${la_l5_izz}"
+                vis_material="grey"/>
+    
+    <!-- Joint4: Link4 - Link5 -->           
+    <m_joint name="joint_ralink4_to_ralink5" type="revolute"
+             axis_xyz="1 0 0"
+             origin_rpy="0 0 0" origin_xyz="0 0.0 ${z_la_j5}"
+             parent="ra_link4" child="ra_link5"
+             limit_e="10000" limit_l="${lu_la_j5}" limit_u="${-1*ll_la_j5}" limit_v="${lv_la_j5}" />    

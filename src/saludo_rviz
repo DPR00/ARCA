@@ -1,0 +1,84 @@
+#!/usr/bin/env python
+
+import rospy
+import numpy as np
+from sensor_msgs.msg import JointState
+
+#from markers import *
+#from functions import *
+
+rospy.init_node("saludo_Rviz")
+pub = rospy.Publisher('joint_states', JointState, queue_size=1000)
+#bmarker = BallMarker(color['GREEN'])
+ 
+# Left joints - names
+# jl1='joint_base_to_lalink1'; jl2='joint_lalink1_to_lalink2'; jl3='joint_lalink2_to_lalink3'
+# jl4='joint_lalink3_to_lalink4'; jl5='joint_lalink4_to_lalink5'
+# Right joints - names
+# jr1='joint_base_to_ralink1'; jr2='joint_ralink1_to_ralink2'; jr3='joint_ralink2_to_ralink3'
+# jr4='joint_ralink3_to_ralink4'; jr5='joint_ralink4_to_ralink5'
+# Neck
+# jbn= 'joint_base_neck'
+
+jnames = ['caster_wheel_M1_wheel_M1_joint', 'caster_wheel_M2_wheel_M2_joint', 'base_link_caster_wheel_M1_joint',
+  'base_link_caster_wheel_M2_joint', 'joint_base_link_driving_wheel_M1', 'joint_base_link_driving_wheel_M2',
+  'joint_base_to_lalink1', 'joint_lalink1_to_lalink2', 'joint_lalink2_to_lalink3', 'joint_lalink3_to_lalink4',
+  'joint_lalink4_to_lalink5', 'joint_base_to_ralink1', 'joint_ralink1_to_ralink2', 'joint_ralink2_to_ralink3',
+  'joint_ralink3_to_ralink4', 'joint_ralink4_to_ralink5', 'joint_base_neck', 'joint_neck_head']
+
+wheel= np.array([0, 0, 0, 0, 0, 0])
+left_arm = np.array ([0, 0, 0, 0, 0])
+initial= -0.15
+right_arm = np.array ([-2.25, initial, -0.6, 1.42, 0])
+neck= np.array([0, 0])
+q = np.concatenate((wheel, left_arm, right_arm, neck), axis=None)
+right_arm1 = np.array ([-2.25, -0.31, -0.6, 1.42, 0])
+q1 = np.concatenate((wheel, left_arm, right_arm1, neck), axis=None)
+right_arm2 = np.array ([-2.25, 0.0, -0.6, 1.42, 0])
+q2 = np.concatenate((wheel, left_arm, right_arm2, neck), axis=None)
+
+
+#T = fkine(q)
+#print( np.round(T, 3) )
+#bmarker.position(T)
+
+# Object (message) whose type is JointState
+jstate = JointState()
+# Set values to the message
+jstate.header.stamp = rospy.Time.now()
+jstate.name = jnames
+# Add the head joint value (with value 0) to the joints
+jstate.position = q
+etapa= 1
+step=0.005
+limitl= -0.45
+limitr= 0.05
+# Loop rate (in Hz)
+rate = rospy.Rate(100)
+# Continuous execution loop
+while not rospy.is_shutdown():
+    # Current time (needed for ROS)
+    jstate.header.stamp = rospy.Time.now()
+    if(etapa ==1):
+        q[12]-= step
+        if(q[12]<=limitl):
+            etapa=2
+    elif(etapa==2):
+        q[12]+= step
+        if(q[12]>=initial):
+            etapa=3
+    elif(etapa==3):
+        q[12]+=step
+        if(q[12]>=limitr):
+            etapa=4
+    elif(etapa==4):
+        q[12]-=step
+        if(q[12]<=initial):
+            etapa=1
+    #print q[12]
+    # Publish the message
+    pub.publish(jstate)
+
+    #bmarker.publish()
+    # Wait for the next iteration
+    rate.sleep()

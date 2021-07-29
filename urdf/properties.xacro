@@ -1,0 +1,78 @@
+    <!-- Arms-->
+    <!-- Left Arm-->
+    <!-- Properties Link1-->
+    <xacro:property name="yd_l1" value="0.02" />
+    <xacro:property name="la_l1_len" value="0.09" />
+    <xacro:property name="la_l1_rad" value="0.03" />
+    <xacro:property name="la_l1_mass" value="1" />
+    <xacro:property name="la_l1_ixx" value="1.3235"/> <!-- "${(la_l1_mass/12.0)*(3*la_l1_rad*la_l1_rad+la_l1_len*la_l1_len)}" /> -->
+    <xacro:property name="la_l1_iyy" value="${la_l1_ixx}" />
+    <xacro:property name="la_l1_izz" value="0.9655"/> <!-- "${(la_l1_mass*la_l1_rad*la_l1_rad)/2.0}" /> -->
+
+    <!-- Properties Joint1-->
+    <xacro:property name="y_la_j1" value="0.14"/> 
+    <xacro:property name="z_la_j1" value="0.56"/>
+    <xacro:property name="ll_la_j1" value="-3.229"/>
+    <xacro:property name="lu_la_j1" value="0.349"/>
+    <xacro:property name="lv_la_j1" value="0.6"/>
+
+    <!-- Properties Link2-->
+    <xacro:property name="zd_l2" value="-0.042" />
+    <xacro:property name="la_l2_len" value="0.11" />
+    <xacro:property name="la_l2_rad" value="0.02" />
+    <xacro:property name="la_l2_mass" value="${la_l1_mass}" />
+    <xacro:property name="la_l2_ixx" value="1.3235"/> <!-- "${(la_l2_mass/12.0)*(3*la_l2_rad*la_l2_rad+la_l2_len*la_l2_len)}" /> -->
+    <xacro:property name="la_l2_iyy" value="${la_l2_ixx}" />
+    <xacro:property name="la_l2_izz" value="0.9655"/> <!-- "${(la_l2_mass*la_l2_rad*la_l2_rad)/2.0}" /> -->
+
+    <!-- Properties Joint2-->
+    <xacro:property name="y_la_j2" value="0.062"/>
+    <xacro:property name="ll_la_j2" value="-0.175"/>
+    <xacro:property name="lu_la_j2" value="1.745"/>
+    <xacro:property name="lv_la_j2" value="0.6"/>
+
+    <!-- Properties Link3-->
+    <xacro:property name="zd_l3" value="-0.028" />
+    <xacro:property name="la_l3_len" value="0.085" />
+    <xacro:property name="la_l3_rad" value="0.02" />
+    <xacro:property name="la_l3_mass" value="${la_l1_mass}" />
+    <xacro:property name="la_l3_ixx" value="1.3235"/> <!-- "${(la_l3_mass/12.0)*(3*la_l3_rad*la_l3_rad+la_l3_len*la_l3_len)}" /> -->
+    <xacro:property name="la_l3_iyy" value="${la_l3_ixx}" />
+    <xacro:property name="la_l3_izz" value="0.9655"/> <!-- "${(la_l3_mass*la_l3_rad*la_l3_rad)/2.0}" /> -->
+
+    <!-- Properties Joint3-->
+    <xacro:property name="z_la_j3" value="-0.097"/>
+    <xacro:property name="ll_la_j3" value="-2.094"/>
+    <xacro:property name="lu_la_j3" value="0.0"/>
+    <xacro:property name="lv_la_j3" value="0.6"/>
+
+    <!-- Properties Link4-->
+    <xacro:property name="zd_l4" value="-0.017" />
+    <xacro:property name="la_l4_len" value="0.045" />
+    <xacro:property name="la_l4_rad" value="0.02" />
+    <xacro:property name="la_l4_mass" value="${la_l1_mass}" />
+    <xacro:property name="la_l4_ixx" value="1.3235"/> <!-- "${(la_l4_mass/12.0)*(3*la_l4_rad*la_l4_rad+la_l4_len*la_l4_len)}" /> -->
+    <xacro:property name="la_l4_iyy" value="${la_l4_ixx}" />
+    <xacro:property name="la_l4_izz" value="0.9655"/> <!-- "${(la_l4_mass*la_l4_rad*la_l4_rad)/2.0}" /> -->
+
+    <!-- Properties Joint4-->
+    <xacro:property name="z_la_j4" value="-0.064"/>
+    <xacro:property name="ll_la_j4" value="-3.1416"/>
+    <xacro:property name="lu_la_j4" value="1.5708"/>
+    <xacro:property name="lv_la_j4" value="0.6"/>
+
+    <!-- Properties Link5-->
+    <xacro:property name="zd_l5" value="-0.002" />
+    <xacro:property name="la_l5_sx" value="0.006" />
+    <xacro:property name="la_l5_sy" value="0.023" />
+    <xacro:property name="la_l5_sz" value="0.04" />
+    <xacro:property name="la_l5_mass" value="1" />
+    <xacro:property name="la_l5_ixx" value="1.3235"/> <!-- "${(la_l5_mass/12.0)*(la_l5_sy*la_l5_sy+la_l5_sz*la_l5_sz)}" /> -->
+    <xacro:property name="la_l5_iyy" value="${(la_l5_mass/12.0)*(la_l5_sx*la_l5_sx+la_l5_sz*la_l5_sz)}" />
+    <xacro:property name="la_l5_izz" value="0.9655"/> <!-- "${(la_l5_mass/12.0)*(la_l5_sx*la_l5_sx+la_l5_sy*la_l5_sy)}" /> -->
+
+    <!-- Properties Joint5-->
+    <xacro:property name="z_la_j5" value="-0.035"/>
+    <xacro:property name="ll_la_j5" value="-0.7854"/>
+    <xacro:property name="lu_la_j5" value="0.0"/>
+    <xacro:property name="lv_la_j5" value="0.6"/>

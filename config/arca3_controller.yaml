@@ -1,0 +1,49 @@
+arca3:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # Left arm - Position Controllers ---------------------------------------
+  la_joint1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_base_to_lalink1
+    pid: {p: 20000.0, i: 100, d: 50.0}
+  la_joint2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_lalink1_to_lalink2
+    pid: {p: 2000.0, i: 100, d: 50.0}
+  la_joint3_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_lalink2_to_lalink3
+    pid: {p: 2000.0, i: 100, d: 50.0}
+  la_joint4_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_lalink3_to_lalink4
+    pid: {p: 2000.0, i: 100, d: 50.0}
+  la_joint5_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_lalink4_to_lalink5
+    pid: {p: 2000.0, i: 100, d: 50.0}
+
+  # Right arm - Position Controllers ---------------------------------------
+  ra_joint1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_base_to_ralink1
+    pid: {p: 20000.0, i: 100, d: 50.0}
+  ra_joint2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_ralink1_to_ralink2
+    pid: {p: 2000.0, i: 100, d: 50.0}
+  ra_joint3_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_ralink2_to_ralink3
+    pid: {p: 2000.0, i: 100, d: 50.0}
+  ra_joint4_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_ralink3_to_ralink4
+    pid: {p: 2000.0, i: 100, d: 50.0}
+  ra_joint5_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_ralink4_to_ralink5
+    pid: {p: 2000.0, i: 100, d: 50.0}

@@ -1,0 +1,30 @@
+<launch>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find arca3_description)/config/arca3_controller.yaml" command="load"/>
+
+  <include file="$(find arca3_description)/launch/spawn_gazebo.launch">
+      <arg name="robot_name" default="arca3" /> 
+  </include>
+  
+  <!--<node pkg="arca3_description" name="arca3_tf_br" type="arca3_tf"/> -->
+
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/arca3" args="joint_state_controller
+                                          la_joint1_position_controller la_joint2_position_controller
+                                          la_joint3_position_controller la_joint4_position_controller
+                                          la_joint5_position_controller ra_joint1_position_controller
+                                          ra_joint2_position_controller ra_joint3_position_controller
+                                          ra_joint4_position_controller ra_joint5_position_controller"/>
+
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/arca3/joint_states" />
+  </node>
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find arca3_description)/rviz/arca3vf_display.rviz"/>
+
+</launch>

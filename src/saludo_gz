@@ -1,0 +1,75 @@
+#!/usr/bin/env python
+
+import rospy
+import numpy as np
+from std_msgs.msg import Float64
+
+def publicar(jdata):
+    j1.data= jdata[0]; j2.data= jdata[1]; j3.data= jdata[2]
+    j4.data= jdata[3]; j5.data= jdata[4]
+    print "holas"
+    pub1.publish(j1); pub2.publish(j2); pub3.publish(j3)
+    pub4.publish(j4); pub4.publish(j5)
+
+    return 1
+'''
+def publicar(jdata1, jdata2, jdata3, jdata4, jdata5):
+    j1.data= jdata1; j2.data= jdata2; j3.data= jdata3
+    j4.data= jdata4; j5.data= jdata5
+    print "holas"
+    pub1.publish(j1); pub2.publish(j2); pub3.publish(j3)
+    pub4.publish(j4); pub4.publish(j5)
+
+    return 1
+''' 
+if __name__ == "__main__":
+
+    rospy.init_node("saludofromgz")
+
+    ra1='/arca3/ra_joint1_position_controller/command'
+    ra2='/arca3/ra_joint2_position_controller/command'
+    ra3='/arca3/ra_joint3_position_controller/command'
+    ra4='/arca3/ra_joint4_position_controller/command'
+    ra5='/arca3/ra_joint5_position_controller/command'
+    pub1 = rospy.Publisher(ra1, Float64, queue_size=100, latch=True)
+    pub2 = rospy.Publisher(ra2, Float64, queue_size=100, latch=True)
+    pub3 = rospy.Publisher(ra3, Float64, queue_size=100, latch=True)
+    pub4 = rospy.Publisher(ra4, Float64, queue_size=100, latch=True)
+    pub5 = rospy.Publisher(ra5, Float64, queue_size=100, latch=True)
+
+    j1=Float64(); j2= Float64(); j3= Float64()
+    j4=Float64(); j5= Float64()
+
+    initial= -0.15
+    q=[-2.25, initial, -0.6, 1.42, 0]
+    publicar(q)
+    print "hola"
+    etapa= 1
+    step=0.005
+    limitl= -0.45
+    limitr= 0.05
+    # Loop rate (in Hz)
+    rate = rospy.Rate(100)
+    # Continuous execution loop
+    while not rospy.is_shutdown():
+        if(etapa ==1):
+            q[1]-= step
+            if(q[1]<=limitl):
+                etapa=2
+        elif(etapa==2):
+            q[1]+= step
+            if(q[1]>=initial):
+                etapa=3
+        elif(etapa==3):
+            q[1]+=step
+            if(q[1]>=limitr):
+                etapa=4
+        elif(etapa==4):
+            q[1]-=step
+            if(q[1]<=initial):
+                etapa=1
+        #print q[1]
+        # Publish the message
+        pub2.publish(q[1])
+        # Wait for the next iteration
+        rate.sleep()

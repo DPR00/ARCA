@@ -1,0 +1,701 @@
+<?xml version="1.0"?>
+<robot name="arca3" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- BGN - Include -->
+    <xacro:include filename="$(find arca3_description)/urdf/gazebo.xacro" />
+
+    <!-- Inluir archivos de materiales y colores-->
+    <material name="blue">
+        <color rgba="0 0 0.8 1"/>
+    </material>
+
+    <material name="green">
+        <color rgba="0.0 0.8 0.0 1.0"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+    
+    <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+    <material name="red">
+        <color rgba="0.80078125 0.12890625 0.1328125 1.0"/>
+    </material>
+
+    <material name="grey">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+    </material>
+
+    <!-- END - Include -->
+
+    <!-- =========================================== -->
+    <!--                 PROPERTIES                  -->
+    <!-- =========================================== -->
+    <!-- Caster wheels property -->
+    <xacro:property name="cwm" value="0.5" />                                   <!-- cwm: caster wheel mass, [kg] -->
+    <xacro:property name="cwd" value="0.05" />                                  <!-- cwd: caster wheel diameter, [m]  -->
+    <xacro:property name="cwr" value="${cwd/2}" />                              <!-- cwr: caster wheel radius, [m]  -->
+    <xacro:property name="cwo" value="0.015" />                                 <!-- cwo: caster wheel offset, [m]  -->
+    <xacro:property name="cwt" value="0.027" />                                 <!-- cwt: caster wheel tread, [m]  -->
+    <xacro:property name="cwh" value="0.06" />                                  <!-- cwh: caster wheel heat, [m]  -->    
+
+    <xacro:property name="cw_ixx" value="${(cwm/12.0)*(3*cwr*cwr+cwt*cwt)}" />  <!-- cw_ixx: caster wheel inertia x axis, [kgm^2]  -->
+    <xacro:property name="cw_iyy" value="${cw_ixx}" />                          <!-- cw_iyy: caster wheel inertia y axis, [kgm^2]  -->
+    <xacro:property name="cw_izz" value="${(cwm*cwr*cwr)/2.0}" />               <!-- cw_izz: caster wheel inertia z axis, [kgm^2]  -->    
+
+    <xacro:property name="yc_dist" value="0.149" />                             <!-- yc_dist: distance from the origin to the wheel along the y axis, [m]  -->
+
+    <!-- Driving wheels property -->
+    <xacro:property name="dwm" value="0.6" />                                   <!-- dwm: driving wheel mass, [kg] -->
+    <xacro:property name="dwd" value="0.125" />                                 <!-- dwd: driving wheel diameter, [m]  -->
+    <xacro:property name="dwr" value="${dwd/2}" />                              <!-- dwr: driving wheel radius, [m]  -->
+    <xacro:property name="dwt" value="0.044" />                                 <!-- dwt: driving wheel tread, [m]  -->    
+
+    <xacro:property name="dw_ixx" value="${(dwm/12.0)*(3*dwr*dwr+dwt*dwt)}" />  <!-- dw_ixx: driving wheel inertia x axis, [kgm^2]  -->
+    <xacro:property name="dw_iyy" value="${dw_ixx}" />                          <!-- dw_iyy: driving wheel inertia y axis, [kgm^2]  -->
+    <xacro:property name="dw_izz" value="${(dwm*dwr*dwr)/2.0}" />               <!-- dw_izz: driving wheel inertia z axis, [kgm^2]  -->   
+
+    <xacro:property name="xd_dist" value="0.11" />                              <!-- xd_dist: distance from the origin to the wheel along the x axis, [m]  -->
+
+    <!-- chassis property -->
+    <xacro:property name="cm" value="10.0" />                                   <!-- cm: chassis mass, [kg] -->
+    <xacro:property name="clod" value="0.300" />                                <!-- clod: chassis longitudinal dimension, [m]  -->
+    <xacro:property name="clad" value="0.240" />                                <!-- clad: chassis lateral dimension, [m]  -->
+    <xacro:property name="ch" value="1" />                                      <!-- ch: chassis height, [m]  -->
+
+    <xacro:property name="c_ixx" value="500.0" />      <!-- c_ixx: chassis inertia x axis, [kgm^2]  -->
+    <xacro:property name="c_iyy" value="500.0" />      <!-- c_iyy: chassis inertia y axis, [kgm^2]  -->
+    <xacro:property name="c_izz" value="500.0" />  <!-- c_izz: chassis inertia z axis, [kgm^2]  -->   
+
+<!--
+    <xacro:property name="c_ixx" value="${(cm/12.0)*(clad*clad+ch*ch)}" />      
+    <xacro:property name="c_iyy" value="${(cm/12.0)*(clod*clod+ch*ch)}" />     
+    <xacro:property name="c_izz" value="${(cm/12.0)*(clod*clod+clad*clad)}" />     
+  -->  
+    <xacro:property name="zch_dist" value="0.105" />                            <!-- zch_dist: distance from the ground to the bottom of the chasis, [m]  -->
+
+    <!-- caster_wheel_link property -->
+    <xacro:property name="cwlm" value="0.050" />                                <!-- cwlm: caster wheel link mass, [kg] -->
+    <xacro:property name="cwlh" value="${(cwh-cwr)}" />                         <!-- cwlh: caster wheel link height, [m]  -->
+
+    <!-- Sensors -->
+    <xacro:property name="laser_len" value="0.003" />                           <!-- laser_len: length of the laser (it's a cube), [m]-->
+    <xacro:property name="dcam_len" value="0.002" />                            <!-- dcam_len: length of the depth camera (it's a cube), [m]-->   
+    <xacro:property name="camera_len" value="0.005" />                          <!-- camera_len: length of the camera (it's a cube), [m] -->
+
+    <!-- =========================================== -->
+    <!--                    MACROS                   -->
+    <!-- =========================================== -->
+    <!-- caster_wheel_link macro -->
+    <xacro:macro name="caster_wheel_link" params="number colour">
+
+        <link name="caster_wheel_M${number}_link">   
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.020 0.02 ${cwlh}"/>
+                </geometry>
+                <material name="white"/>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.020 0.020 ${cwlh}"/>
+                </geometry>
+            </collision>
+
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>            
+                <mass value="${cwlm}" />
+                <inertia ixx="0" ixy="0.0" ixz="0.0" iyy="0" iyz="0.0" izz="0"/>
+            </inertial>
+ 
+        </link>
+
+        <gazebo reference="caster_wheel_M${number}_link">
+            <kp>10000.0</kp>
+            <kd>10000.0</kd>
+            <mu1>10.0</mu1>
+            <mu2>10.0</mu2>
+            <material>Gazebo/Grey</material>
+        </gazebo>
+
+        <link name="wheel_M${number}_link">    
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder length="${cwt}" radius="${cwr}"/>
+                </geometry>
+                <material name="grey"/>
+            </visual>    
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder length="${cwt}" radius="${cwr}"/>
+                </geometry>
+            </collision>
+
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>            
+                <mass value="${cwm}" />
+                <inertia ixx="${cw_ixx}" ixy="0.0" ixz="0.0" iyy="${cw_iyy}" iyz="0.0" izz="${cw_izz}"/>
+            </inertial>
+
+        </link>
+
+        <gazebo reference="wheel_M${number}_link">
+            <kp>10000.0</kp>
+            <kd>10000.0</kd>
+            <mu1>10.0</mu1>
+            <mu2>10.0</mu2>
+            <material>Gazebo/${colour}</material>
+        </gazebo>
+
+        <joint name="caster_wheel_M${number}_wheel_M${number}_joint" type="continuous">
+            <parent link="caster_wheel_M${number}_link"/>
+            <child link="wheel_M${number}_link"/>
+            <origin xyz="${cwo} 0 ${-cwlh}" rpy="1.570796 0 0"/>
+            <limit  effort="1.0" velocity="0.005"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+
+    </xacro:macro>
+
+    <!-- driving_wheel_link macro -->
+    <xacro:macro name="driving_wheel_link" params="number colour">
+        
+        <link name="driving_wheel_M${number}_link">    
+            
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder length="${dwt}" radius="${dwr}"/>
+                </geometry>
+                <material name="blue"/>
+            </visual>  
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder length="${dwt}" radius="${dwr}"/>
+                </geometry>
+            </collision>  
+
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>            
+                <mass value="${dwm}" />
+                <inertia ixx="${dw_ixx}" ixy="0.0" ixz="0.0" iyy="${dw_iyy}" iyz="0.0" izz="${dw_izz}"/>
+            </inertial>
+        
+
+        </link>
+
+        <gazebo reference="driving_wheel_M${number}_link">
+            <kp>10000.0</kp>
+            <kd>10000.0</kd>
+            <mu1>10.0</mu1>
+            <mu2>10.0</mu2>
+            <material>Gazebo/${colour}</material>
+        </gazebo>
+
+    </xacro:macro>
+
+    <!-- arm link macro -->
+    <xacro:macro name="m_link_cylinder" params="name origin_xyz origin_rpy length radius mass ixx ixy ixz iyy iyz izz vis_material">
+        <link name="${name}">
+        <inertial>
+            <mass value="${mass}" />
+            <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+            <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" />
+        </inertial>
+        <collision>
+            <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+            <geometry>
+            <cylinder length="${length}" radius="${radius}"/>
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+            <geometry>
+            <cylinder length="${length}" radius="${radius}"/>
+            </geometry>
+            <material name="${vis_material}"/>
+        </visual>
+        </link>
+    </xacro:macro>
+
+    <!-- joint base-arm macro -->
+    <xacro:macro name="m_joint" params="name type axis_xyz origin_rpy origin_xyz parent child limit_e limit_l limit_u limit_v">
+        <joint name="${name}" type="${type}">
+            <axis xyz="${axis_xyz}" />
+            <limit effort="${limit_e}" lower="${limit_l}" upper="${limit_u}" velocity="${limit_v}" />
+            <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+            <parent link="${parent}" />
+            <child link="${child}" />
+        </joint>
+        <transmission name="trans_${name}">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${name}">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor_${name}">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+    </xacro:macro>
+
+    <!-- gripper box macro -->
+    <xacro:macro name="m_link_box" params="name origin_xyz origin_rpy size mass ixx ixy ixz iyy iyz izz vis_material">
+        <link name="${name}">
+            <inertial>
+                <mass value="${mass}" />
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" />
+            </inertial>
+            <collision>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <box size="${size}" />
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <box size="${size}" />
+                </geometry>
+                <material name="${vis_material}"/>
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <!-- driving wheel transmission -->
+    <!-- <xacro:macro name="driving_wheel_transmission" params="number">
+        <transmission name="tran${number}">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="joint_base_link_driving_wheel_M${number}">
+                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor${number}">
+                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+    </xacro:macro> -->
+
+    <!-- =========================================== -->
+    <!--              ROBOT DESCRIPTION              -->
+    <!-- =========================================== -->
+    <!-- Chassis -->
+    <link name="base_link">
+        <visual>
+            <origin xyz="0 0 ${zch_dist}" rpy="0 0 0"/>     
+            <geometry>
+                <mesh filename="package://arca3_description/urdf/meshes/Estructura_arca.stl" scale="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 ${zch_dist}" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://arca3_description/urdf/meshes/Estructura_arca.stl" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <origin xyz="0 0 ${zch_dist}" rpy="0 0 0"/>            
+            <mass value="${cm}"/>
+            <inertia ixx="${c_ixx}" ixy="0.0" ixz="0.0" iyy="${c_iyy}" iyz="0.0" izz="${c_izz}"/>
+        </inertial>      
+    </link>
+
+    <!-- Caster wheels and link -->    
+    <xacro:caster_wheel_link number="1" colour="Grey"/>
+    <xacro:caster_wheel_link number="2" colour="Grey"/>
+    
+    <!-- Joint among chassis and caster wheels -->
+    <joint name="base_link_caster_wheel_M1_joint" type="continuous">
+    	<parent link="base_link"/>
+    	<child link="caster_wheel_M1_link"/>
+        <origin xyz="${xd_dist} 0 ${dwr}" rpy="0 0 0"/>
+        <limit effort="1.0" velocity="1"/>
+        <axis xyz="0 0 1"/>
+	</joint>
+
+    <joint name="base_link_caster_wheel_M2_joint" type="continuous">
+    	<parent link="base_link"/>
+    	<child link="caster_wheel_M2_link"/>
+        <origin xyz="-${xd_dist} 0 ${dwr}" rpy="0 0 0"/>
+        <limit effort="1.0" velocity="1"/>
+        <axis xyz="0 0 1"/>
+	</joint>
+
+    <!-- Driving wheels -->
+    <xacro:driving_wheel_link number="1" colour="Blue"/>
+    <xacro:driving_wheel_link number="2" colour="Blue"/>
+
+    <!-- Joint among chassis and driving wheels -->
+    <joint name="joint_base_link_driving_wheel_M1" type="continuous">
+    	<parent link="base_link"/>
+    	<child link="driving_wheel_M1_link"/>
+        <origin xyz="0 -${yc_dist} ${dwr}" rpy="1.57 0 0"/>
+        <limit effort="15.0" velocity="0.1"/>
+        <axis xyz="0 0 -1"/>
+	</joint>
+
+    <joint name="joint_base_link_driving_wheel_M2" type="continuous">
+    	<parent link="base_link"/>
+    	<child link="driving_wheel_M2_link"/>
+        <origin xyz="0 ${yc_dist} ${dwr}" rpy="1.57 0 0"/>
+        <limit effort="15.0" velocity="0.1"/>
+        <axis xyz="0 0 -1"/>
+	</joint>
+
+     <!-- ============================================ -->
+    <!--                 LEFT ARM                     -->
+    <!-- ============================================ -->
+
+    <!-- Link1: Left arm arca -->
+    <m_link_cylinder name="la_link1"
+                     origin_xyz="0 0.02 0" origin_rpy="1.5708 0 0"
+                     length="0.09" radius="0.03"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+
+    <!-- Joint1: base_link - Link1 -->           
+    <m_joint name="joint_base_to_lalink1" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 0.14 0.56"
+             parent="base_link" child="la_link1"
+             limit_e="10000" limit_l="-3.229" limit_u="0.349" limit_v="0.6" />
+    
+    <!-- Link2: Brazo arca -->
+    <m_link_cylinder name="la_link2"
+                     origin_xyz="0 0.0 -0.042" origin_rpy="0 0 0"
+                     length="0.11" radius="0.02"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+    
+    <!-- Joint2: Link1 - Link2 -->           
+    <m_joint name="joint_lalink1_to_lalink2" type="revolute"
+             axis_xyz="1 0 0"
+             origin_rpy="0 0 0" origin_xyz="0 0.062 0"
+             parent="la_link1" child="la_link2"
+             limit_e="10000" limit_l="-0.175" limit_u="1.745" limit_v="0.6" />
+    
+    <!-- Link3: Brazo arca -->
+    <m_link_cylinder name="la_link3"
+                     origin_xyz="0 0.0 -0.028" origin_rpy="0 0 0"
+                     length="0.085" radius="0.02"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+    
+    <!-- Joint3: Link2 - Link3 -->        
+    <m_joint name="joint_lalink2_to_lalink3" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 0 -0.097"
+             parent="la_link2" child="la_link3"
+             limit_e="10000" limit_l="-2.094" limit_u="0.0" limit_v="0.6" />
+    
+    <!-- Link4: Brazo arca -->
+    <m_link_cylinder name="la_link4"
+                     origin_xyz="0 0.0 -0.017" origin_rpy="0 0 0"
+                     length="0.035" radius="0.02"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+    
+    <!-- Joint4: Link3 - Link4 -->           
+    <m_joint name="joint_lalink3_to_lalink4" type="revolute"
+             axis_xyz="0 0 1"
+             origin_rpy="0 0 0" origin_xyz="0 0.0 -0.064"
+             parent="la_link3" child="la_link4"
+             limit_e="10000" limit_l="-3.1416" limit_u="1.5708" limit_v="0.6" />
+    
+    <!-- Link5: manito -->
+    <m_link_box name="la_link5"
+                origin_xyz="0 0.0 -0.002" origin_rpy="0 0 1.5708"
+                size="0.006 0.023 0.04" mass="1"
+                ixx="1.3235" ixy="0" ixz="0"
+                iyy="1.3235" iyz="0"
+                izz="0.9655"
+                vis_material="grey"/>
+    
+    <!-- Joint4: Link4 - Link5 -->           
+    <m_joint name="joint_lalink4_to_lalink5" type="revolute"
+             axis_xyz="1 0 0"
+             origin_rpy="0 0 0" origin_xyz="0 0.0 -0.035"
+             parent="la_link4" child="la_link5"
+             limit_e="10000" limit_l="-0.7854" limit_u="0.0" limit_v="0.6" />
+
+    <!-- ============================================ -->
+    <!--                 RIGHT ARM                 -->
+    <!-- ============================================ -->
+    <!-- Link1: right arm arca -->
+    <m_link_cylinder name="ra_link1"
+                     origin_xyz="0 -0.02 0" origin_rpy="1.5708 0 0"
+                     length="0.09" radius="0.03"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+    
+    <!-- Joint1: base_link - Link1 -->         
+    <m_joint name="joint_base_to_ralink1" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 -0.14 0.56"
+             parent="base_link" child="ra_link1"
+             limit_e="10000" limit_l="-3.229" limit_u="0.349" limit_v="0.6" />
+    
+    <!-- Link2: Brazo arca -->
+    <m_link_cylinder name="ra_link2"
+                     origin_xyz="0 0.0 -0.042" origin_rpy="0 0 0"
+                     length="0.11" radius="0.02"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+    
+    <!-- Joint2: Link1 - Link2 -->           
+    <m_joint name="joint_ralink1_to_ralink2" type="revolute"
+             axis_xyz="1 0 0"
+             origin_rpy="0 0 0" origin_xyz="0 -0.062 0"
+             parent="ra_link1" child="ra_link2"
+             limit_e="10000" limit_l="-1.745" limit_u="0.175" limit_v="0.6" />
+    
+    <!-- Link3: Brazo arca -->
+    <m_link_cylinder name="ra_link3"
+                     origin_xyz="0 0.0 -0.028" origin_rpy="0 0 0"
+                     length="0.085" radius="0.02"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+    
+    <!-- Joint3: Link2 - Link3 -->       
+    <m_joint name="joint_ralink2_to_ralink3" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 0 -0.097"
+             parent="ra_link2" child="ra_link3"
+             limit_e="10000" limit_l="-2.094" limit_u="0.0" limit_v="0.6" />
+    
+    <!-- Link4: Brazo arca -->
+    <m_link_cylinder name="ra_link4"
+                     origin_xyz="0 0.0 -0.017" origin_rpy="0 0 0"
+                     length="0.045" radius="0.02"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+    
+    <!-- Joint4: Link3 - Link4 -->          
+    <m_joint name="joint_ralink3_to_ralink4" type="revolute"
+             axis_xyz="0 0 1"
+             origin_rpy="0 0 0" origin_xyz="0 0.0 -0.064"
+             parent="ra_link3" child="ra_link4"
+             limit_e="10000" limit_l="-3.1416" limit_u="1.5708" limit_v="0.6" />
+    
+
+    <!-- Link5: manito -->
+    <m_link_box name="ra_link5"
+                origin_xyz="0 0.0 -0.002" origin_rpy="0 0 1.5708"
+                size="0.006 0.023 0.04" mass="1"
+                ixx="1.3235" ixy="0" ixz="0"
+                iyy="1.3235" iyz="0"
+                izz="0.9655"
+                vis_material="grey"/>
+    
+    <!-- Joint4: Link4 - Link5 -->           
+    <m_joint name="joint_ralink4_to_ralink5" type="revolute"
+             axis_xyz="1 0 0"
+             origin_rpy="0 0 0" origin_xyz="0 0.0 -0.035"
+             parent="ra_link4" child="ra_link5"
+             limit_e="10000" limit_l="0.0" limit_u="0.7854" limit_v="0.6" />    
+
+    <!-- ============================================ -->
+    <!--                      HEAD                    -->
+    <!-- ============================================ -->  
+
+    <!-- Link: Neck-->
+    <m_link_cylinder name="link_neck"
+                     origin_xyz="0 0 0" origin_rpy="0 0 0"
+                     length="0.008" radius="0.005"
+                     mass="1"
+                     ixx="1.3235" ixy="0" ixz="0"
+                     iyy="1.3235" iyz="0"
+                     izz="0.9655"
+                     vis_material="white"/>
+
+    <!-- Joint1: base_link - Link1 -->         
+    <m_joint name="joint_base_neck" type="revolute"
+             axis_xyz="0 0 1"
+             origin_rpy="0 0 0" origin_xyz="0 0 0.635"
+             parent="base_link" child="link_neck"
+             limit_e="10000" limit_l="-1.222" limit_u="1.222" limit_v="0.6" />
+
+    <!-- Link: Head-->
+    <link name="link_head">
+        <visual>
+            <origin xyz="0 0 0.055" rpy="0 0 0"/>     
+            <geometry>
+                <sphere radius="0.078"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0.055" rpy="0 0 0"/>
+            <geometry>
+                <sphere radius="0.078"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <origin xyz="0 0 0.055" rpy="0 0 0"/>            
+            <mass value="0.3"/>
+            <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+        </inertial>      
+    </link>
+    <!-- Joint4: head - base_link -->           
+    <m_joint name="joint_neck_head" type="revolute"
+             axis_xyz="0 1 0"
+             origin_rpy="0 0 0" origin_xyz="0 0 0"
+             parent="link_neck" child="link_head"
+             limit_e="10000" limit_l="-0.12" limit_u="0.0" limit_v="0.6" />  
+
+    <!-- ============================================ -->
+    <!-- PLugin - Gazebo drive controller (diff robot)-->
+    <!-- ============================================ -->
+    <gazebo>
+        <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+            <alwaysOn>true</alwaysOn>
+            <updateRate>30</updateRate>
+            <leftJoint>joint_base_link_driving_wheel_M2</leftJoint>
+            <rightJoint>joint_base_link_driving_wheel_M1</rightJoint>
+            <wheelSeparation>${clad+dwt}</wheelSeparation>
+            <wheelDiameter>${dwd}</wheelDiameter>
+            <wheelAcceleration>1</wheelAcceleration>
+            <wheelTorque>10</wheelTorque>
+            <commandTopic>cmd_vel</commandTopic>
+            <odometryTopic>odom</odometryTopic>
+            <odometryFrame>odom</odometryFrame>
+            <robotBaseFrame>base_footprint</robotBaseFrame>
+            <publishWheelTF>true</publishWheelTF>
+            <publishOdom>true</publishOdom>
+            <publishWheelJointState>true</publishWheelJointState>
+            <legacyMode>false</legacyMode>
+            <rosDebugLevel>false</rosDebugLevel>
+            <publishOdomTF>true</publishOdomTF>
+            <odometrySource>1</odometrySource>
+            <publishTf>1</publishTf>
+        </plugin>
+    </gazebo>
+    
+    <!-- ============================================ -->
+    <!--                   SENSORS                    -->
+    <!-- ============================================ -->
+    
+    <!-- Sensor Laser in the base -->
+    <link name="front_laserscanner_link">      
+        <visual>
+            <origin rpy="0.0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <box size="${laser_len} ${laser_len} ${laser_len}"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+
+        <collision>
+            <origin rpy="0.0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <box size="${laser_len} ${laser_len} ${laser_len}"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <mass value="1e-5" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+
+    </link>
+
+    <joint name="base_front_laserscanner_joint" type="fixed">
+        <axis xyz="0 1 0" />
+        <parent link="base_link"/>
+        <child link="front_laserscanner_link"/>
+        <origin xyz="${2*clod/3} 0 ${ch/8}" rpy="0 0 -1.5708"/>
+    </joint>
+
+    <!-- Depth sensor at the middle -->
+    <link name="front_dcamera_link">
+      <visual>
+        <origin rpy="0.0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <box size="${dcam_len} ${dcam_len} ${dcam_len}"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+    </link>
+
+    <joint name="base_front_dcamera_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="front_dcamera_link"/>
+      <origin xyz="${23*clod/50} 0 ${3*ch/5}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Camera in the head -->
+    <link name="camera_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${camera_len} ${camera_len} ${camera_len}"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${camera_len} ${camera_len} ${camera_len}"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <mass value="1e-5" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+        <axis xyz="0 1 0" />
+        <origin xyz="${clod/4} 0 ${7*ch/10}" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+    </joint>
+
+</robot>

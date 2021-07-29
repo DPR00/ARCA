@@ -1,0 +1,14 @@
+Limites articulares de cada brazo
+Brazo izquierdo:
+ - joint_base_to_lalink1: [-3.229, 0.349]
+ - joint_lalink1_to_lalink2: [-0.175, 1.745]
+ - joint_lalink2_to_lalink3: [-2.094, 0.0]
+ - joint_lalink3_to_lalink4: [-3.1416, 1.5708]
+ - joint_lalink4_to_lalink5: [-0.7854, 0.0]
+
+Brazo derecho:
+ - joint_base_to_ralink1: [-3.229, 0.349]
+ - joint_ralink1_to_ralink2: [-1.745, 0.175]
+ - joint_ralink2_to_ralink3: [-2.094, 0.0]
+ - joint_ralink3_to_ralink4: [-3.1416, 1.5708]
+ - joint_ralink4_to_ralink5: [0.0, 0.7854]

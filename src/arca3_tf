@@ -1,0 +1,112 @@
+#!/usr/bin/env python
+
+import tf
+import rospy
+
+if __name__ == '__main__':
+    
+    rospy.init_node('arca3_tf_br')
+    
+    bflaser_blink = tf.TransformBroadcaster()
+    blink_bfprint = tf.TransformBroadcaster()
+    bcamera_blink = tf.TransformBroadcaster()
+    bdcamera_blink = tf.TransformBroadcaster()
+    
+    bcasterfr_blink = tf.TransformBroadcaster()
+    bcasterfl_blink = tf.TransformBroadcaster()
+    
+    bwcasterfr_blink = tf.TransformBroadcaster()
+    bwcasterfl_blink = tf.TransformBroadcaster()
+
+    bla_link1_blink = tf.TransformBroadcaster()
+    bla_link2_blink = tf.TransformBroadcaster()
+    bla_link3_blink = tf.TransformBroadcaster()
+    bla_link4_blink = tf.TransformBroadcaster()
+    bla_link5_blink = tf.TransformBroadcaster()
+
+    bra_link1_blink = tf.TransformBroadcaster()
+    bra_link2_blink = tf.TransformBroadcaster()
+    bra_link3_blink = tf.TransformBroadcaster()
+    bra_link4_blink = tf.TransformBroadcaster()
+    bra_link5_blink = tf.TransformBroadcaster()
+
+    rate = rospy.Rate(50)
+
+    while not rospy.is_shutdown():
+
+        blink_bfprint.sendTransform((0.00, 0.00, 0.00),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"base_link","base_footprint")
+
+        bflaser_blink.sendTransform((0.2, 0, 0.125),
+            tf.transformations.quaternion_from_euler(0, 0, -1.5708),
+            rospy.Time.now(),"front_laserscanner_link","base_link")
+
+        bcamera_blink.sendTransform((0.1, 0, 0.66667),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"camera_link","base_link")
+
+        bdcamera_blink.sendTransform((0.15, 0.00, 0.5),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"front_dcamera_link","base_link")
+
+        bcasterfr_blink.sendTransform((-0.11, 0, 0.0625),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"caster_wheel_M2_link","base_link")
+
+        bcasterfl_blink.sendTransform((0.11, 0, 0.0625),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"caster_wheel_M1_link","base_link")
+
+        bwcasterfr_blink.sendTransform((0.015, 0.0, -0.035),
+            tf.transformations.quaternion_from_euler(1.570796, 0, 0),
+            rospy.Time.now(),"wheel_M2_link","caster_wheel_M2_link")
+
+        bwcasterfl_blink.sendTransform((0.015, 0.0, -0.035),
+            tf.transformations.quaternion_from_euler(1.570796, 0, 0),
+            rospy.Time.now(),"wheel_M1_link","caster_wheel_M1_link")
+
+
+        # Left Arm
+#        bla_link1_blink.sendTransform((0.0, 0.14, 0.5),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"la_link1","base_link")
+
+#        bla_link2_blink.sendTransform((0.0, 0.062, 0),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"la_link2","la_link1")
+
+#        bla_link3_blink.sendTransform((0.0, 0.0, -0.097),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"la_link3","la_link2")
+
+#        bla_link4_blink.sendTransform((0.0, 0.0, -0.064),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"la_link4","la_link3")
+
+#        bla_link5_blink.sendTransform((0.0, 0.0, -0.035),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"la_link5","la_link4")
+
+#        # Right Arm
+#        bra_link1_blink.sendTransform((0.0, -0.14, 0.5),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"ra_link1","base_link")
+
+#        bra_link2_blink.sendTransform((0.0, -0.062, 0),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"ra_link2","ra_link1")
+
+#        bra_link3_blink.sendTransform((0.0, 0.0, -0.097),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"ra_link3","ra_link2")
+
+#        bra_link4_blink.sendTransform((0.0, 0.0, -0.064),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"ra_link4","ra_link3")
+
+#        bra_link5_blink.sendTransform((0.0, 0.0, -0.035),
+#            tf.transformations.quaternion_from_euler(0, 0, 0),
+#            rospy.Time.now(),"ra_link5","ra_link4")
+
+        rate.sleep()

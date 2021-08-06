@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="x_pos" default="-3.7"/>
+    <arg name="x_pos" default="-0.7"/>
     <arg name="y_pos" default="0.0"/>
     <arg name="z_pos" default="0.0"/>
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-            <arg name="world_name" value="$(find arca3_description)/worlds/world_obstacles.world"/>
+            <arg name="world_name" value="$(find arca3_description)/worlds/obs.world"/>
             <arg name="debug" value="false" />
             <arg name="gui" value="true" />
             <arg name="paused" value="false"/>
@@ -22,5 +22,5 @@
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
             output="screen"
             args="-urdf -model $(arg robot_name) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description"/>
-
+    
 </launch>

@@ -19,12 +19,12 @@
                                           ra_joint4_position_controller ra_joint5_position_controller"/>
 
 
-  <!-- convert joint states to TF transforms for rviz, etc -->
+  <!-- convert joint states to TF transforms for rviz, etc-->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
     respawn="false" output="screen">
     <remap from="/joint_states" to="/arca3/joint_states" />
-  </node>
+  </node> 
 
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find arca3_description)/rviz/show_map_arca.rviz"/>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find arca3_description)/rviz/arca3vf_display.rviz"/>
 
 </launch>

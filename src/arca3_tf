@@ -66,47 +66,54 @@ if __name__ == '__main__':
             tf.transformations.quaternion_from_euler(1.570796, 0, 0),
             rospy.Time.now(),"wheel_M1_link","caster_wheel_M1_link")
 
+        bwcasterfr_blink.sendTransform((0.0, -0.149, 0.0625),
+            tf.transformations.quaternion_from_euler(1.57, 0, 0),
+            rospy.Time.now(),"driving_wheel_M1_link","base_link")
 
-        # Left Arm
-#        bla_link1_blink.sendTransform((0.0, 0.14, 0.5),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"la_link1","base_link")
+        bwcasterfl_blink.sendTransform((0.0, 0.149, 0.0625),
+            tf.transformations.quaternion_from_euler(1.57, 0, 0),
+            rospy.Time.now(),"driving_wheel_M2_link","base_link")
 
-#        bla_link2_blink.sendTransform((0.0, 0.062, 0),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"la_link2","la_link1")
+        #Left Arm
+        bla_link1_blink.sendTransform((0.0, 0.14, 0.56),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"la_link1","base_link")
 
-#        bla_link3_blink.sendTransform((0.0, 0.0, -0.097),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"la_link3","la_link2")
+        bla_link2_blink.sendTransform((0.0, 0.062, 0),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"la_link2","la_link1")
 
-#        bla_link4_blink.sendTransform((0.0, 0.0, -0.064),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"la_link4","la_link3")
+        bla_link3_blink.sendTransform((0.0, 0.0, -0.097),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"la_link3","la_link2")
 
-#        bla_link5_blink.sendTransform((0.0, 0.0, -0.035),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"la_link5","la_link4")
+        bla_link4_blink.sendTransform((0.0, 0.0, -0.064),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"la_link4","la_link3")
 
-#        # Right Arm
-#        bra_link1_blink.sendTransform((0.0, -0.14, 0.5),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"ra_link1","base_link")
+        bla_link5_blink.sendTransform((0.0, 0.0, -0.035),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"la_link5","la_link4")
 
-#        bra_link2_blink.sendTransform((0.0, -0.062, 0),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"ra_link2","ra_link1")
+        # Right Arm
+        bra_link1_blink.sendTransform((0.0, -0.14, 0.56),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"ra_link1","base_link")
 
-#        bra_link3_blink.sendTransform((0.0, 0.0, -0.097),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"ra_link3","ra_link2")
+        bra_link2_blink.sendTransform((0.0, -0.062, 0),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"ra_link2","ra_link1")
 
-#        bra_link4_blink.sendTransform((0.0, 0.0, -0.064),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"ra_link4","ra_link3")
+        bra_link3_blink.sendTransform((0.0, 0.0, -0.097),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"ra_link3","ra_link2")
 
-#        bra_link5_blink.sendTransform((0.0, 0.0, -0.035),
-#            tf.transformations.quaternion_from_euler(0, 0, 0),
-#            rospy.Time.now(),"ra_link5","ra_link4")
+        bra_link4_blink.sendTransform((0.0, 0.0, -0.064),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"ra_link4","ra_link3")
+
+        bra_link5_blink.sendTransform((0.0, 0.0, -0.035),
+            tf.transformations.quaternion_from_euler(0, 0, 0),
+            rospy.Time.now(),"ra_link5","ra_link4")
 
         rate.sleep()

@@ -1,11 +1,9 @@
-Para probar a arca moviéndose ejecutar los siguientes comandos:
+To test ARCA joints run the following commands:
 
 $ roslaunch arca3_description arca3_joint_control.launch
 
-Luego debes abrir Gazebo y Rviz. Se podrá visualizar en ambos.
+Then you must open Gazebo and Rviz. It will be displayed in both.
 
-Para desplazar a arca (como con el turtlebot), correr el siguiente comando:
+To move arca with the keyboard (similar to turtlebot), run the following command:
 
 $ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
-
-He estado probando creando un archivo para hacer el SLAM (arca_slam_mapping.launch), pero opr alguna razón el urd no se muestra bien con ello. aún no he podido ver porqué pasa eso.

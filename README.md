@@ -7,3 +7,5 @@ Then you must open Gazebo and Rviz. It will be displayed in both.
 To move arca with the keyboard (similar to turtlebot), run the following command:
 
 $ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+
+The project was tested in ROS Kinetic and Ubuntu 16.04
